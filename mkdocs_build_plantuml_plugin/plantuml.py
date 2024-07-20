@@ -28,6 +28,26 @@ b64_to_plantuml = maketrans(
 
 
 class BuildPlantumlPluginConfig(base.Config):
+    """
+    Configuration class for the BuildPlantumlPlugin.
+
+    Attributes:
+        render (str): The rendering mode for PlantUML diagrams. Default is "server".
+        server (str): The URL of the PlantUML server. Default is "https://www.plantuml.com/plantuml".
+        disable_ssl_certificate_validation (bool): Whether to disable SSL certificate validation. Default is False.
+        bin_path (str): The path to the PlantUML binary. Default is "/usr/local/bin/plantuml".
+        output_format (str): The output format for generated diagrams. Default is "png".
+        allow_multiple_roots (bool): Whether to allow multiple diagram roots. Default is False.
+        diagram_root (str): The root directory for diagram files. Default is "docs/diagrams".
+        output_folder (str): The output folder for generated diagrams. Default is "out".
+        output_in_dir (bool): Whether to output diagrams in separate directories. Default is False.
+        input_folder (str): The input folder for diagram source files. Default is "src".
+        input_extensions (str): The extensions of diagram source files. Default is an empty string.
+        theme_enabled (bool): Whether to enable custom themes for diagrams. Default is False.
+        theme_folder (str): The folder containing custom theme files. Default is "include/themes/".
+        theme_light (str): The filename of the light theme file. Default is "light.puml".
+        theme_dark (str): The filename of the dark theme file. Default is "dark.puml".
+    """
     render = mkdocs.config.config_options.Type(str, default="server")
     server = mkdocs.config.config_options.Type(
         str, default="https://www.plantuml.com/plantuml"
@@ -50,14 +70,36 @@ class BuildPlantumlPluginConfig(base.Config):
 
 
 class BuildPlantumlPlugin(BasePlugin[BuildPlantumlPluginConfig]):
-    """main plugin entry point"""
+    """
+    A plugin for building PlantUML diagrams during the MkDocs build process.
+
+    This plugin is responsible for processing PlantUML diagrams and generating the corresponding output files.
+    It searches for diagram files in the specified directories, reads the source files, and converts them to the
+    desired output format. It also supports dark mode and includes functionality for handling include statements.
+
+    The plugin provides a pre-build hook that is called before the build process starts. During this hook, it checks
+    the configuration parameters and looks for diagram files to process. It then performs the necessary operations
+    to generate the output files for each diagram.
+
+    """
 
     def __init__(self):
         self.total_time = 0
 
     def on_pre_build(self, config):
-        """Checking given parameters and looking for files"""
+        """
+        Pre-build hook for the plugin.
 
+        This function is called before the build process starts. It checks the given parameters and looks for files
+        to process.
+
+        Args:
+            config: The configuration object for the plugin.
+
+        Returns:
+            The updated configuration object.
+
+        """
         diagram_roots = []
 
         if self.config["allow_multiple_roots"]:
@@ -108,19 +150,36 @@ class BuildPlantumlPlugin(BasePlugin[BuildPlantumlPluginConfig]):
         return config
 
     def _make_diagram_root(self, subdir):
-        diagram_root = DiagramRoot()
-        diagram_root.root_dir = str(Path.cwd() / subdir)
-        diagram_root.src_dir = str(Path.cwd() / subdir / self.config["input_folder"])
-        print(
-            "root dir: {}, src dir: {}".format(
-                diagram_root.root_dir, diagram_root.src_dir
+            """
+            Creates a DiagramRoot object with the specified subdirectory.
+
+            Args:
+                subdir (str): The subdirectory for the diagram root.
+
+            Returns:
+                DiagramRoot: The created DiagramRoot object.
+            """
+            diagram_root = DiagramRoot()
+            diagram_root.root_dir = str(Path.cwd() / subdir)
+            diagram_root.src_dir = str(Path.cwd() / subdir / self.config["input_folder"])
+            print(
+                "root dir: {}, src dir: {}".format(
+                    diagram_root.root_dir, diagram_root.src_dir
+                )
             )
-        )
-        return diagram_root
+            return diagram_root
 
     def _get_out_directory(self, root, subdir):
         """
-        if the subdir begins with root.src_dir strip it off.
+        Get the output directory for the generated files.
+
+        Args:
+            root (RootConfig): The root configuration object.
+            subdir (str): The subdirectory path.
+
+        Returns:
+            str: The output directory path.
+
         """
         relPath = Path(subdir)
         try:
@@ -138,6 +197,15 @@ class BuildPlantumlPlugin(BasePlugin[BuildPlantumlPluginConfig]):
 
     # Search for a optional filename after the start tag
     def _search_start_tag(self, diagram):
+        """
+        Searches for the start tag in the given diagram's source file and sets the output file paths accordingly.
+
+        Args:
+            diagram (Diagram): The diagram object containing the source file and output directory.
+
+        Returns:
+            bool: True if the start tag is found and the output file paths are set, False otherwise.
+        """
         outDir = Path(diagram.out_dir)
         for line in diagram.src_file:
             line = line.rstrip()
@@ -153,6 +221,15 @@ class BuildPlantumlPlugin(BasePlugin[BuildPlantumlPluginConfig]):
         return False
 
     def _build_mtimes(self, diagram):
+        """
+        Builds the modification times for the diagram files.
+
+        Args:
+            diagram (Diagram): The diagram object.
+
+        Returns:
+            None
+        """
         # Compare the file mtimes between src and target
         try:
             diagram.img_time = Path(diagram.out_file).stat().st_mtime
@@ -171,6 +248,16 @@ class BuildPlantumlPlugin(BasePlugin[BuildPlantumlPluginConfig]):
         diagram.inc_time = 0
 
     def _readFile(self, diagram, dark_mode):
+        """
+        Reads the contents of a file and performs compression, base64 encoding, and other operations on it.
+
+        Args:
+            diagram (Diagram): The diagram object containing information about the file.
+            dark_mode (bool): A flag indicating whether dark mode is enabled.
+
+        Returns:
+            None
+        """
         print(f"Processing diagram {diagram.file}")
         temp_file = self._readFileRecursively(
             diagram.src_file, "", diagram, diagram.directory, dark_mode
@@ -189,6 +276,19 @@ class BuildPlantumlPlugin(BasePlugin[BuildPlantumlPluginConfig]):
 
     # Reads the file recursively
     def _readFileRecursively(self, lines, temp_file, diagram, directory, dark_mode):
+        """
+        Recursively reads the lines of a file, processing include statements and appending the contents to a temporary file.
+
+        Args:
+            lines (list): The lines of the file to be read.
+            temp_file (str): The temporary file to append the contents to.
+            diagram (str): The diagram being processed.
+            directory (str): The directory of the file being read.
+            dark_mode (bool): Flag indicating whether dark mode is enabled.
+
+        Returns:
+            str: The updated temporary file with the contents of the file and included files.
+        """
         for line in lines:
             line = line.strip()
             if line.startswith("!include"):
@@ -204,14 +304,30 @@ class BuildPlantumlPlugin(BasePlugin[BuildPlantumlPluginConfig]):
         return temp_file
 
     def _readIncludeLine(self, diagram, line, temp_file, directory, dark_mode):
-        """Handles the different include types like !includeurl, !include and !includesub"""
+        """
+        Handles the different include types like !includeurl, !include, and !includesub.
+
+        Args:
+            diagram (Diagram): The diagram object.
+            line (str): The include line to be processed.
+            temp_file (str): The temporary file content.
+            directory (str): The directory path.
+            dark_mode (bool): Flag indicating if dark mode is enabled.
+
+        Returns:
+            str: The updated temporary file content.
+
+        Raises:
+            Exception: If the include type is unknown or if the syntax of !includesub is invalid.
+            FileNotFoundError: If the included file cannot be found.
+        """
         # If includeurl is found, we do not have to do anything here.
         # Server can handle that
         if re.match(r"^!includeurl\s+\S+\s*$", line):
             temp_file += line
 
         elif re.match(r"^!includesub\s+\S+\s*$", line):
-            # on the eleventh position starts the inluded file
+            # on the eleventh position starts the included file
             parts = line[11:].strip().split("!")
             if len(parts) == 2:
                 inc_file = parts[0]  # Extract the file path
@@ -281,7 +397,18 @@ class BuildPlantumlPlugin(BasePlugin[BuildPlantumlPluginConfig]):
         return temp_file
 
     def _read_incl_line_file(self, diagram, temp_file, dark_mode, inc_file_abs):
-        """Save the mtime of the inc file to compare"""
+        """
+        Read the included line file and update the diagram's inc_time if necessary.
+
+        Args:
+            diagram (Diagram): The diagram object to update.
+            temp_file (str): The temporary file to write the included lines.
+            dark_mode (bool): Flag indicating whether to use dark mode.
+            inc_file_abs (Path): The absolute path of the included line file.
+
+        Returns:
+            str: The updated temporary file.
+        """
         try:
             local_inc_time = inc_file_abs.stat().st_mtime
         except Exception as _:
@@ -302,7 +429,19 @@ class BuildPlantumlPlugin(BasePlugin[BuildPlantumlPluginConfig]):
         return temp_file
 
     def _read_incl_sub(self, diagram, temp_file, dark_mode, inc_file_abs, inc_sub_name):
-        """Handle !includesub statements"""
+        """
+        Handle !includesub statements.
+
+        Args:
+            diagram (Diagram): The diagram object.
+            temp_file (str): The temporary file path.
+            dark_mode (bool): Flag indicating whether dark mode is enabled.
+            inc_file_abs (str): The absolute path of the included file.
+            inc_sub_name (str): The name of the included sub.
+
+        Returns:
+            str: The updated temporary file path.
+        """
         # Save the mtime of the inc file to compare
         incFileAbs = Path(inc_file_abs)
         try:
@@ -336,23 +475,39 @@ class BuildPlantumlPlugin(BasePlugin[BuildPlantumlPluginConfig]):
         return temp_file
 
     def _build_out_filename(self, diagram):
-        out_index = diagram.file.rfind(".")
-        if out_index > -1:
-            diagram.out_file = (
-                diagram.file[: out_index + 1] + self.config["output_format"]
-            )
-            if self.config["theme_enabled"]:
-                diagram.out_file_dark = (
-                    diagram.file[:out_index] + "_dark." + self.config["output_format"]
+            """
+            Builds the output filename for the given diagram.
+
+            Args:
+                diagram (Diagram): The diagram object.
+
+            Returns:
+                Diagram: The updated diagram object with the output filename set.
+            """
+            out_index = diagram.file.rfind(".")
+            if out_index > -1:
+                diagram.out_file = (
+                    diagram.file[: out_index + 1] + self.config["output_format"]
                 )
+                if self.config["theme_enabled"]:
+                    diagram.out_file_dark = (
+                        diagram.file[:out_index] + "_dark." + self.config["output_format"]
+                    )
 
-        diagram.out_file = str(Path(diagram.out_dir) / diagram.out_file)
-        if self.config["theme_enabled"]:
-            diagram.out_file_dark = str(Path(diagram.out_dir) / diagram.out_file_dark)
+            diagram.out_file = str(Path(diagram.out_dir) / diagram.out_file)
+            if self.config["theme_enabled"]:
+                diagram.out_file_dark = str(Path(diagram.out_dir) / diagram.out_file_dark)
 
-        return diagram
+            return diagram
 
     def _convert(self, diagram, dark_mode=False):
+        """
+        Converts the given diagram to an image using either local rendering or server rendering.
+
+        Args:
+            diagram (Diagram): The diagram object to convert.
+            dark_mode (bool, optional): Indicates whether to convert the diagram in dark mode. Defaults to False.
+        """
         if not dark_mode:
             if (diagram.img_time < diagram.src_time) or (
                 diagram.inc_time > diagram.img_time
@@ -386,6 +541,19 @@ class BuildPlantumlPlugin(BasePlugin[BuildPlantumlPluginConfig]):
             self._call_server(diagram, diagram.out_file_dark)
 
     def _call_server(self, diagram, out_file):
+        """
+        Calls the PlantUML server to process the given diagram and save the output to a file.
+
+        Args:
+            diagram (Diagram): The diagram object containing the diagram data.
+            out_file (str): The name of the output file.
+
+        Raises:
+            Exception: If there is a server error while processing the diagram.
+
+        Returns:
+            None
+        """
         http = httplib2.Http({})
 
         if self.config["disable_ssl_certificate_validation"]:
@@ -414,13 +582,22 @@ class BuildPlantumlPlugin(BasePlugin[BuildPlantumlPluginConfig]):
                 out.write(content)
 
     def _file_matches_extension(self, file):
-        if len(self.config["input_extensions"]) == 0:
-            return True
-        extensions = self.config["input_extensions"].split(",")
-        for extension in extensions:
-            if file.endswith(extension):
+            """
+            Check if the given file matches any of the input extensions specified in the configuration.
+
+            Args:
+                file (str): The file name to check.
+
+            Returns:
+                bool: True if the file matches any of the input extensions, False otherwise.
+            """
+            if len(self.config["input_extensions"]) == 0:
                 return True
-        return False
+            extensions = self.config["input_extensions"].split(",")
+            for extension in extensions:
+                if file.endswith(extension):
+                    return True
+            return False
 
 
 class PuElement:
