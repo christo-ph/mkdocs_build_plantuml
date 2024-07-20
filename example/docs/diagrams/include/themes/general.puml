@@ -3,6 +3,7 @@
 skinparam Padding 4
 skinparam RoundCorner 4
 skinparam Shadowing false
+skinparam backgroundColor transparent
 
 skinparam Default {
   'FontName "Open Sans Semibold"
