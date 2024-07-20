@@ -10,12 +10,30 @@ theme:
   logo:
     icon: "folder_open"
   palette:
-    primary: "light blue"
-    accent: "light blue"
+    # Palette toggle for automatic mode
+    - media: "(prefers-color-scheme)"
+      toggle:
+        icon: material/link
+        name: Switch to light mode
 
-extra_css:
-  - "stylesheets/extra.css"
-  - "stylesheets/theme_dark.css"
+    # Palette toggle for light mode
+    - media: "(prefers-color-scheme: light)"
+      scheme: default
+      primary: indigo
+      accent: indigo
+      toggle:
+        icon: material/toggle-switch
+        name: Switch to dark mode
+
+    # Palette toggle for dark mode
+    - media: "(prefers-color-scheme: dark)"
+      scheme: slate
+      primary: black
+      accent: indigo
+      toggle:
+        icon: material/toggle-switch-off
+        name: Switch to system preference
+
 extra_javascript:
   - "javascript/images_dark.js"
 
