@@ -134,6 +134,8 @@ You can find an example in the [example folder](./example/)
 
 ![DarkMode](./switch_dark_mode.gif)
 
+![DarkMode LightBox](./switch_lightbox.gif)
+
 ## Known restrictions
 
 - If you use `!include` and the `render: "server"` option, this plugin merges those files manually. If there are any issues or side effects because of that, please open a ticket.

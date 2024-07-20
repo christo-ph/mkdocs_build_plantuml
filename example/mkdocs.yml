@@ -57,7 +57,6 @@ plugins:
       theme_folder: "include/themes"
       theme_light: "light.puml"
       theme_dark: "dark.puml"
-  - exclude:
-      glob:
-        - diagrams/include/C4/*
+  - glightbox: # enable lightbox for images
+      background: var(--md-default-bg-color)
         
