@@ -6,9 +6,6 @@
  * user preferences or system settings. It also modifies the sources of images and lightbox
  * href attributes to match the current theme.
  * 
- * Author: Firas AlShafei
- * Email: f.alshafei@gmail.com
- * Version: 1.0.0
  * 
  * Functionality:
  * --------------
