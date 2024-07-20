@@ -113,7 +113,7 @@ Since Version 1.4 this plugin can support dark mode when rendering with `server`
 
 **Note**: Not in local mode, only server rendering mode
 
-1. Grab a general (ie. for [Material Theme](https://squidfunk.github.io/mkdocs-material/)) dark mode support css file (i.e. from [henrywhitaker3/mkdocs-material-dark-theme](https://github.com/henrywhitaker3/mkdocs-material-dark-theme)) for your theme
+1. Install latest (ie. for [Material Theme](https://squidfunk.github.io/mkdocs-material/)) 
 1. Enable theme support in this plugin:
 
         - build_plantuml:
@@ -133,6 +133,8 @@ You can find an example in the [example folder](./example/)
 ### Example Output
 
 ![DarkMode](./switch_dark_mode.gif)
+
+![DarkMode LightBox](./switch_lightbox.gif)
 
 ## Known restrictions
 
