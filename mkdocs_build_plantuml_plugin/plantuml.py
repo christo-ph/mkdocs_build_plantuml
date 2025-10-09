@@ -150,15 +150,15 @@ class BuildPlantumlPlugin(BasePlugin[BuildPlantumlPluginConfig]):
         return config
 
     def _make_diagram_root(self, subdir):
-            """
-            Creates a DiagramRoot object with the specified subdirectory.
+        """
+        Creates a DiagramRoot object with the specified subdirectory.
 
-            Args:
-                subdir (str): The subdirectory for the diagram root.
+        Args:
+            subdir (str): The subdirectory for the diagram root.
 
-            Returns:
-                DiagramRoot: The created DiagramRoot object.
-            """
+        Returns:
+            DiagramRoot: The created DiagramRoot object.
+        """
             diagram_root = DiagramRoot()
             diagram_root.root_dir = str(Path.cwd() / subdir)
             diagram_root.src_dir = str(Path.cwd() / subdir / self.config["input_folder"])
