@@ -475,15 +475,15 @@ class BuildPlantumlPlugin(BasePlugin[BuildPlantumlPluginConfig]):
         return temp_file
 
     def _build_out_filename(self, diagram):
-            """
-            Builds the output filename for the given diagram.
+        """
+        Builds the output filename for the given diagram.
 
-            Args:
-                diagram (Diagram): The diagram object.
+        Args:
+            diagram (Diagram): The diagram object.
 
-            Returns:
-                Diagram: The updated diagram object with the output filename set.
-            """
+        Returns:
+            Diagram: The updated diagram object with the output filename set.
+        """
             out_index = diagram.file.rfind(".")
             if out_index > -1:
                 diagram.out_file = (
