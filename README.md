@@ -58,7 +58,7 @@ plugins:
   - search
   - build_plantuml:
       render: 'server' # or "local" for local rendering
-      bin_path: '/usr/local/bin/plantuml' # ignored when render: server
+      bin_path: '/usr/local/bin/plantuml' # ignored when render: server, default plantuml from PATH
       server: 'http://www.plantuml.com/plantuml' # official plantuml server
       disable_ssl_certificate_validation: true # for self-signed and invalid certs
       output_format: 'svg' # or "png"
