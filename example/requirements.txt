@@ -1,9 +1,9 @@
-mkdocs>=1.6.0
-mkdocs-build-plantuml-plugin>=2.0.0
+mkdocs>=1.6.1
+# mkdocs-build-plantuml-plugin - install locally with: pip install -e ..
 mkdocs-exclude>=1.0.2
-mkdocs-git-revision-date-localized-plugin>=1.2.0
-mkdocs-material>=9.5.0
+mkdocs-git-revision-date-localized-plugin>=1.5.0
+mkdocs-material>=9.7.1
 mkdocs-minify-plugin>=0.8.0
-pygments>=2.18.0
-pymdown-extensions>=10.12
-markdown>=3.7
+pygments>=2.19.2
+pymdown-extensions>=10.20
+markdown>=3.10.1

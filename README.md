@@ -39,7 +39,7 @@ You need to have installed:
 - [Plantuml](https://plantuml.com) (if running locally)
 - This plugin (needs [httplib2](https://pypi.org/project/httplib2/) for server rendering)
 
-On macOS you can install plantuml with homebrew which puts a plantuml executable in `/usr/local/bin/plantuml`.
+On macOS you can install plantuml with homebrew which puts a plantuml executable in `/opt/homebrew/bin/plantuml` (Apple Silicon) or `/usr/local/bin/plantuml` (Intel).
 
 ## Installation
 
@@ -58,7 +58,7 @@ plugins:
   - search
   - build_plantuml:
       render: 'server' # or "local" for local rendering
-      bin_path: '/usr/local/bin/plantuml' # ignored when render: server, default plantuml from PATH
+      bin_path: 'plantuml' # ignored when render: server, defaults to PATH lookup
       server: 'http://www.plantuml.com/plantuml' # official plantuml server
       disable_ssl_certificate_validation: true # for self-signed and invalid certs
       output_format: 'svg' # or "png"
