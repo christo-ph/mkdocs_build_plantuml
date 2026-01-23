@@ -108,6 +108,6 @@ This release updates the example project to MkDocs Material 9.x, which requires 
 
 - Dark mode / theme support for server rendering
 
-[2.0.0]: https://github.com/christo-ph/mkdocs_build_plantuml/releases/tag/v2.0.0
-[1.11.0]: https://github.com/christo-ph/mkdocs_build_plantuml/releases/tag/v1.11.0
-[1.10.0]: https://github.com/christo-ph/mkdocs_build_plantuml/releases/tag/v1.10.0
+[2.0.0]: https://github.com/christo-ph/mkdocs_build_plantuml/releases/tag/2.0.0
+[1.11.0]: https://github.com/christo-ph/mkdocs_build_plantuml/releases/tag/1.11.0
+[1.10.0]: https://github.com/christo-ph/mkdocs_build_plantuml/releases/tag/1.10.0
