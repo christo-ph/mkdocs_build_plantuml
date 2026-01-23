@@ -94,3 +94,6 @@ ENV/
 
 # Python virtual environments
 .venv
+
+# OS
+.DS_Store

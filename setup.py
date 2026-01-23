@@ -1,6 +1,3 @@
-import io
-import os
-
 from setuptools import setup, find_packages
 
 with open("README.md", "r") as f:
@@ -23,6 +20,9 @@ setup(
     license="MIT",
     python_requires=">=3.12",
     install_requires=["mkdocs>=1.0.4", "httplib2"],
+    extras_require={
+        'test': ['pytest>=7.0', 'pytest-cov'],
+    },
     classifiers=[
         "Development Status :: 5 - Production/Stable",
         "Intended Audience :: Developers",
