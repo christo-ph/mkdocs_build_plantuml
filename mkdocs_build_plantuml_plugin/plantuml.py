@@ -39,7 +39,7 @@ class BuildPlantumlPluginConfig(base.Config):
     disable_ssl_certificate_validation = mkdocs.config.config_options.Type(
         bool, default=False
     )
-    bin_path = mkdocs.config.config_options.Type(str, default=shutil.which('plantuml'))
+    bin_path = mkdocs.config.config_options.Type(str, default=shutil.which('plantuml') or 'plantuml')
     output_format = mkdocs.config.config_options.Type(str, default="png")
     allow_multiple_roots = mkdocs.config.config_options.Type(bool, default=False)
     diagram_root = mkdocs.config.config_options.Type(str, default="docs/diagrams")
