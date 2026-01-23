@@ -4,6 +4,7 @@
 !define BORDER_COLOR       #EEEEEE
 !define FONT_COLOR         #EEEEEE
 
+skinparam backgroundColor transparent
 
 ' include the general skinparams for both, light and dark
 ' to overwrite with the given settings

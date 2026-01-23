@@ -148,6 +148,17 @@ skinparam rectangle<<boundary>> {
   BorderStyle dashed
   BorderThickness BORDER_THICKNESS
 }
+
+' C4 System_Boundary styling (newer C4 versions)
+skinparam rectangle<<system_boundary>> {
+  Shadowing false
+  BackgroundColor BG_PACKAGE_COLOR
+  StereotypeFontColor FONT_COLOR
+  FontColor FONT_COLOR
+  BorderColor BORDER_COLOR
+  BorderStyle dashed
+  BorderThickness BORDER_THICKNESS
+}
 skinparam rectangle<<container>> {
   Shadowing false
   StereotypeFontSize 14

@@ -5,13 +5,21 @@ repo_name: "christo-ph/mkdocs_build_plantuml"
 theme:
   name: "material"
   language: "en"
-  feature:
-    tabs: false
-  logo:
-    icon: "folder_open"
+  icon:
+    logo: material/folder-open
   palette:
-    primary: "light blue"
-    accent: "light blue"
+    - scheme: default
+      primary: light blue
+      accent: light blue
+      toggle:
+        icon: material/brightness-7
+        name: Switch to dark mode
+    - scheme: slate
+      primary: light blue
+      accent: light blue
+      toggle:
+        icon: material/brightness-4
+        name: Switch to light mode
 
 extra_css:
   - "stylesheets/extra.css"

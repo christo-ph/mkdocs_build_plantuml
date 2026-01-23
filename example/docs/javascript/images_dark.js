@@ -1,32 +1,42 @@
-if (window.matchMedia('(prefers-color-scheme: dark)').matches === true) {
-  var darkables = document.querySelectorAll('img[src$="darkable"');
-  fromLightToDark(darkables);
-}
+// Handle Material 9.x theme toggle for diagram images
+function updateDiagramImages() {
+  const scheme = document.body.getAttribute('data-md-color-scheme');
+  const darkables = document.querySelectorAll('img[src$="darkable"]');
 
-const darkModeMediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
-darkModeMediaQuery.addListener((e) => {
-  const darkModeOn = e.matches;
-  var darkables = document.querySelectorAll('img[src$="darkable"');
-
-  if (darkModeOn)
+  if (scheme === 'slate') {
     fromLightToDark(darkables);
-  else
+  } else {
     fromDarkToLight(darkables);
-  console.log(`Dark mode is ${darkModeOn ? '🌒 on' : '☀️ off'}.`);
-});
+  }
+}
 
 function fromLightToDark(images) {
   images.forEach(image => {
-    var idx = image.src.lastIndexOf('.');
-    if (idx > -1) {
-      var add = "_dark";
-      image.src = [image.src.slice(0, idx), add, image.src.slice(idx)].join('');
+    if (!image.src.includes('_dark.')) {
+      const idx = image.src.lastIndexOf('.');
+      if (idx > -1) {
+        image.src = [image.src.slice(0, idx), '_dark', image.src.slice(idx)].join('');
+      }
     }
   });
 }
 
 function fromDarkToLight(images) {
   images.forEach(image => {
-    image.src = image.src.replace("_dark", "");
+    image.src = image.src.replace('_dark.', '.');
   });
 }
+
+// Initial check on page load
+document.addEventListener('DOMContentLoaded', updateDiagramImages);
+
+// Watch for theme changes via MutationObserver
+const observer = new MutationObserver((mutations) => {
+  mutations.forEach((mutation) => {
+    if (mutation.attributeName === 'data-md-color-scheme') {
+      updateDiagramImages();
+    }
+  });
+});
+
+observer.observe(document.body, { attributes: true });

@@ -10,6 +10,7 @@
 - [Usage](#usage)
 - [Dark Mode Support](#dark-mode-support)
 - [Known restrictions](#known-restrictions)
+- [Changelog](#changelog)
 - [Contributing](#contributing)
 
 ## About the Project
@@ -109,26 +110,62 @@ Inside your `index.md` or any other Markdown file you can then reference any cre
 
 ## Dark Mode Support
 
-Since Version 1.4 this plugin can support dark mode when rendering with `server` (prefers-color-scheme).
+Since Version 1.4 this plugin can support dark mode when rendering with `server`.
 
-**Note**: Not in local mode, only server rendering mode
+**Note**: Dark mode / theme support is only available in server rendering mode, not local.
 
-1. Grab a general (ie. for [Material Theme](https://squidfunk.github.io/mkdocs-material/)) dark mode support css file (i.e. from [henrywhitaker3/mkdocs-material-dark-theme](https://github.com/henrywhitaker3/mkdocs-material-dark-theme)) for your theme
-1. Enable theme support in this plugin:
+### Setup for MkDocs Material 9.x
 
-        - build_plantuml:
-            [...]
-            theme_enabled: true
-            theme_folder: "include/themes"
-            theme_light: "light.puml"
-            theme_dark: "dark.puml"
+1. Configure the Material theme with a palette toggle in `mkdocs.yml`:
 
-1. You have to provide two puml theme files, ie mydarkmode.puml and mylightmode.puml
-1. In the out directory a `<file>.<ext>` will be created and additionally a `<file>_dark.<ext>`
-1. Insert your images in markdown with `![file](diagrams/out/file.svg#darkable)` (this selector is then used in the [JS file](example/docs/javascript/images_dark.js) to know which images have to be exchanged)
-1. provide [`extra_javascript`](./example/docs/javascript/images_dark.js) file which handles the switch
+    ```yaml
+    theme:
+      name: material
+      palette:
+        - scheme: default
+          toggle:
+            icon: material/brightness-7
+            name: Switch to dark mode
+        - scheme: slate
+          toggle:
+            icon: material/brightness-4
+            name: Switch to light mode
+    ```
 
-You can find an example in the [example folder](./example/)
+2. Enable theme support in this plugin:
+
+    ```yaml
+    plugins:
+      - build_plantuml:
+          render: "server"
+          theme_enabled: true
+          theme_folder: "include/themes"
+          theme_light: "light.puml"
+          theme_dark: "dark.puml"
+    ```
+
+3. Create two PlantUML theme files (e.g., `light.puml` and `dark.puml`) with appropriate colors and `skinparam backgroundColor transparent` for proper dark mode display.
+
+4. In the `out` directory, both `<file>.<ext>` and `<file>_dark.<ext>` will be generated.
+
+5. Reference images in markdown with the `#darkable` suffix:
+
+    ```markdown
+    ![file](diagrams/out/file.svg#darkable)
+    ```
+
+6. Add JavaScript to swap images on theme toggle ([example](./example/docs/javascript/images_dark.js)):
+
+    ```yaml
+    extra_javascript:
+      - javascript/images_dark.js
+    ```
+
+    The JS uses a MutationObserver to watch for changes to `data-md-color-scheme` attribute and swaps `_dark` image variants accordingly.
+
+7. Optionally add CSS for dark mode styling using `[data-md-color-scheme="slate"]` selector ([example](./example/docs/stylesheets/theme_dark.css)).
+
+See the [example folder](./example/) for a complete working setup.
 
 ### Example Output
 
@@ -139,6 +176,19 @@ You can find an example in the [example folder](./example/)
 - If you use `!include` and the `render: "server"` option, this plugin merges those files manually. If there are any issues or side effects because of that, please open a ticket.
 - Dark mode / theme support is currently only available in server rendering mode.
 
+## Changelog
+
+See [CHANGELOG.md](./CHANGELOG.md) for version history and breaking changes.
+
 ## Contributing
 
 Contributions are welcome! If you find any issues or have suggestions for improvements, please open an issue or submit a pull request.
+
+### Running Tests
+
+```bash
+pip install -e ".[test]"
+pytest tests/ -v                           # All tests
+pytest tests/ --ignore=tests/test_integration.py  # Unit tests only
+pytest tests/test_integration.py -v        # Integration tests (requires network)
+```

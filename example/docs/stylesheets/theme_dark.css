@@ -1,4 +1,5 @@
-@media(prefers-color-scheme: dark) {
+/* Material 9.x uses data-md-color-scheme attribute */
+[data-md-color-scheme="slate"] {
 
   html,
   body {
