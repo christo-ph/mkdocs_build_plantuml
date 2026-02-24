@@ -30,6 +30,7 @@ def plugin():
         "theme_folder": "include/themes/",
         "theme_light": "light.puml",
         "theme_dark": "dark.puml",
+        "exclude_dirs": [".git"],
     }
     return p
 

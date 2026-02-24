@@ -52,6 +52,7 @@ class BuildPlantumlPluginConfig(base.Config):
     theme_folder = mkdocs.config.config_options.Type(str, default="include/themes/")
     theme_light = mkdocs.config.config_options.Type(str, default="light.puml")
     theme_dark = mkdocs.config.config_options.Type(str, default="dark.puml")
+    exclude_dirs = mkdocs.config.config_options.Type(list, default=[".git"])
 
 
 class BuildPlantumlPlugin(BasePlugin[BuildPlantumlPluginConfig]):
@@ -65,9 +66,12 @@ class BuildPlantumlPlugin(BasePlugin[BuildPlantumlPluginConfig]):
 
         diagram_roots = []
 
+        exclude_dirs = self.config["exclude_dirs"]
+
         if self.config["allow_multiple_roots"]:
             # Run through cwd in search of diagram roots
             for subdir, dirs, _ in os.walk(os.getcwd()):
+                dirs[:] = [d for d in dirs if d not in exclude_dirs]
                 for directory in dirs:
                     my_subdir = f"{subdir}/{directory}"
                     if my_subdir.endswith(self.config["diagram_root"]):
@@ -77,7 +81,8 @@ class BuildPlantumlPlugin(BasePlugin[BuildPlantumlPluginConfig]):
 
         # Run through input folders
         for root in diagram_roots:
-            for subdir, _, files in os.walk(root.src_dir):
+            for subdir, dirs, files in os.walk(root.src_dir):
+                dirs[:] = [d for d in dirs if d not in exclude_dirs]
                 for file in files:
                     if self._file_matches_extension(file):
                         diagram = PuElement(file, subdir)
