@@ -1,0 +1,5 @@
+@startuml "named_diagram"
+actor User
+User -> System : Request
+System --> User : Response
+@enduml

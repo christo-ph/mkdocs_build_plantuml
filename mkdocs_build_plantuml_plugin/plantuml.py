@@ -155,7 +155,8 @@ class BuildPlantumlPlugin(BasePlugin[BuildPlantumlPluginConfig]):
                 ws = line.find(" ")
                 if ws > 0:
                     # we look for <filename> which starts after a whitespace
-                    out_filename = line[ws + 1 :]
+                    out_filename = line[ws + 1 :].strip().strip('"\'')
+
                     diagram.out_file = str(outDir / f"{out_filename}.{self.config['output_format']}")
                     if self.config["theme_enabled"]:
                         diagram.out_file_dark = str(outDir / f"{out_filename}_dark.{self.config['output_format']}")

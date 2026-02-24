@@ -86,6 +86,23 @@ class TestSearchStartTag:
         assert result is True
         assert diagram.out_file.endswith(".svg")
 
+    def test_startuml_with_quoted_filename(self, plugin, tmp_path):
+        """@startuml "mydiagram" with quotes should strip quotes from out_file.
+
+        Regression test for #41: PlantUML strips quotes from diagram names when
+        generating output files (local rendering), but the plugin kept the quotes
+        in out_file, causing _build_mtimes to never find the output file,
+        resulting in infinite regeneration during mkdocs serve.
+        """
+        diagram = PuElement("test.puml", str(tmp_path))
+        diagram.out_dir = str(tmp_path / "out")
+        diagram.src_file = ['@startuml "mydiagram"\n', "actor User\n", "@enduml\n"]
+
+        result = plugin._search_start_tag(diagram)
+
+        assert result is True
+        assert diagram.out_file == str(tmp_path / "out" / "mydiagram.png")
+
     def test_startuml_not_on_first_line(self, plugin, tmp_path):
         """@startuml on a later line should still be found."""
         diagram = PuElement("test.puml", str(tmp_path))
