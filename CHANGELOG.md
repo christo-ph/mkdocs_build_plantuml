@@ -5,6 +5,24 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.1.0] - 2026-02-24
+
+### Fixed
+
+- Replace `Path.walk()` with `os.walk()` to restore Python < 3.12 compatibility (#45)
+- Strip quotes from diagram names (e.g. `@startuml "mydiagram"`) to prevent infinite regeneration during `mkdocs serve` (#41)
+- Exclude `.git` and other configurable directories when walking diagram roots to prevent errors when `diagram_root` is set to `.` (#42)
+
+### Added
+
+- New `exclude_dirs` config option (default: `[".git"]`) to skip directories during diagram discovery (#42)
+
+### Changed
+
+- Bump `python_requires` from `>=3.12` to `>=3.10` (Python 3.8/3.9 are EOL; ecosystem deps require 3.10+)
+- Move "Processing diagram" and "root dir / src dir" log messages from `INFO` to `DEBUG` level to reduce log noise in large projects (#38). Use `mkdocs serve --verbose` to see them.
+- Extend CI matrix to cover Python 3.10–3.13
+
 ## [2.0.0] - 2025-01-23
 
 ### Breaking Changes
@@ -108,6 +126,7 @@ This release updates the example project to MkDocs Material 9.x, which requires 
 
 - Dark mode / theme support for server rendering
 
+[2.1.0]: https://github.com/christo-ph/mkdocs_build_plantuml/releases/tag/2.1.0
 [2.0.0]: https://github.com/christo-ph/mkdocs_build_plantuml/releases/tag/2.0.0
 [1.11.0]: https://github.com/christo-ph/mkdocs_build_plantuml/releases/tag/1.11.0
 [1.10.0]: https://github.com/christo-ph/mkdocs_build_plantuml/releases/tag/1.10.0
