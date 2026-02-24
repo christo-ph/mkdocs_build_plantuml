@@ -121,7 +121,7 @@ class BuildPlantumlPlugin(BasePlugin[BuildPlantumlPluginConfig]):
         diagram_root = DiagramRoot()
         diagram_root.root_dir = str(Path.cwd() / subdir)
         diagram_root.src_dir = str(Path.cwd() / subdir / self.config["input_folder"])
-        log.info(
+        log.debug(
             "root dir: {}, src dir: {}".format(
                 diagram_root.root_dir, diagram_root.src_dir
             )
@@ -182,7 +182,7 @@ class BuildPlantumlPlugin(BasePlugin[BuildPlantumlPluginConfig]):
         diagram.inc_time = 0
 
     def _readFile(self, diagram, dark_mode):
-        log.info(f"Processing diagram {diagram.file}")
+        log.debug(f"Processing diagram {diagram.file}")
         temp_file = self._readFileRecursively(
             diagram.src_file, "", diagram, diagram.directory, dark_mode
         )

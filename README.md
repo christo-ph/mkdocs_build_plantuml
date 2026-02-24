@@ -172,6 +172,15 @@ See the [example folder](./example/) for a complete working setup.
 
 ![DarkMode](./switch_dark_mode.gif)
 
+## Debugging
+
+To see detailed plugin output (e.g. which diagrams are being processed and from where), run mkdocs with the `--verbose` flag:
+
+```bash
+mkdocs serve --verbose
+mkdocs build --verbose
+```
+
 ## Known restrictions
 
 - If you use `!include` and the `render: "server"` option, this plugin merges those files manually. If there are any issues or side effects because of that, please open a ticket.
