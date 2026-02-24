@@ -1,5 +1,6 @@
 """ MKDocs Build Plantuml Plugin """
 import base64
+import os
 from pathlib import Path
 import httplib2
 import re
@@ -66,7 +67,7 @@ class BuildPlantumlPlugin(BasePlugin[BuildPlantumlPluginConfig]):
 
         if self.config["allow_multiple_roots"]:
             # Run through cwd in search of diagram roots
-            for subdir, dirs, _ in Path.cwd().walk():
+            for subdir, dirs, _ in os.walk(os.getcwd()):
                 for directory in dirs:
                     my_subdir = f"{subdir}/{directory}"
                     if my_subdir.endswith(self.config["diagram_root"]):
@@ -76,7 +77,7 @@ class BuildPlantumlPlugin(BasePlugin[BuildPlantumlPluginConfig]):
 
         # Run through input folders
         for root in diagram_roots:
-            for subdir, _, files in Path(root.src_dir).walk():
+            for subdir, _, files in os.walk(root.src_dir):
                 for file in files:
                     if self._file_matches_extension(file):
                         diagram = PuElement(file, subdir)

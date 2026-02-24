@@ -18,7 +18,7 @@ setup(
     author="Christoph Galler",
     author_email="galler@quantor.consulting",
     license="MIT",
-    python_requires=">=3.12",
+    python_requires=">=3.8",
     install_requires=["mkdocs>=1.0.4", "httplib2"],
     extras_require={
         'test': ['pytest>=7.0', 'pytest-cov'],
