@@ -19,7 +19,7 @@ setup(
     author_email="galler@quantor.consulting",
     license="MIT",
     python_requires=">=3.10",
-    install_requires=["mkdocs>=1.0.4", "httplib2"],
+    install_requires=["mkdocs>=1.0.4", "httplib2", "six"],
     extras_require={
         'test': ['pytest>=7.0', 'pytest-cov'],
     },
